@@ -27,8 +27,8 @@ type Dialog struct {
 func New(nodes []Node, opts ...Option) *Dialog {
 	p := &Dialog{
 		prefix:         bot.RandomString(16),
-		callbackPrefix: bot.RandomString(16),
-		nodePrefix:     bot.RandomString(16),
+		callbackPrefix: bot.RandomString(4),
+		nodePrefix:     bot.RandomString(4),
 		onError:        defaultOnError,
 		nodes:          nodes,
 	}
