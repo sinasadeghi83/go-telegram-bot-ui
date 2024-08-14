@@ -15,7 +15,7 @@ import (
 
 	"github.com/go-telegram/bot"
 	"github.com/go-telegram/bot/models"
-	"github.com/go-telegram/ui/datepicker"
+	"github.com/sinasadeghi83/go-telegram-bot-ui/datepicker"
 )
 
 func main() {

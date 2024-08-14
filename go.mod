@@ -1,4 +1,4 @@
-module github.com/go-telegram/ui
+module github.com/sinasadeghi83/go-telegram-bot-ui
 
 go 1.20
 

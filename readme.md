@@ -21,7 +21,7 @@ Feel to free to contribute and issues!
 
 ```bash
 go get github.com/go-telegram/bot
-go get github.com/go-telegram/ui
+go get github.com/sinasadeghi83/go-telegram-bot-ui
 ```
 
 **Important**
