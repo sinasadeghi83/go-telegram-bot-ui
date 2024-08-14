@@ -6,6 +6,7 @@ import (
 )
 
 type Button struct {
+	ID              string
 	Text            string
 	NodeID          string
 	URL             string
@@ -36,7 +37,7 @@ func (n Node) buildKB(prefix, nodePrefix, callbackPrefix, parentNodeID string) m
 			case btn.URL != "":
 				b.URL = btn.URL
 			case btn.CallbackHandler != nil:
-				b.CallbackData = prefix + callbackPrefix + parentNodeID + "_" + btn.Text
+				b.CallbackData = prefix + callbackPrefix + parentNodeID + "_" + btn.ID
 			default:
 				b.CallbackData = prefix + nodePrefix + btn.NodeID
 

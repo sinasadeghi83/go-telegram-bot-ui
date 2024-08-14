@@ -83,11 +83,11 @@ func (d *Dialog) callback(ctx context.Context, b *bot.Bot, update *models.Update
 	data, isCustomCallback := strings.CutPrefix(update.CallbackQuery.Data, d.prefix+d.callbackPrefix)
 	if isCustomCallback {
 		btnData := strings.Split(data, "_")
-		parentNodeID, btnText := btnData[0], btnData[1]
+		parentNodeID, btnID := btnData[0], btnData[1]
 		node, _ := d.findNode(parentNodeID)
-		btn, ok := node.findButton(btnText)
+		btn, ok := node.findButton(btnID)
 		if !ok {
-			d.onError(fmt.Errorf("failed to find button with text %s", btnText))
+			d.onError(fmt.Errorf("failed to find button with id %s", btnID))
 			return
 		}
 		update.CallbackQuery.Data = btn.CallbackData
@@ -137,10 +137,10 @@ func (d *Dialog) findNode(id string) (Node, bool) {
 	return Node{}, false
 }
 
-func (node *Node) findButton(text string) (Button, bool) {
+func (node *Node) findButton(ID string) (Button, bool) {
 	for _, row := range node.Keyboard {
 		for _, btn := range row {
-			if btn.Text == text {
+			if btn.ID == ID {
 				return btn, true
 			}
 		}
