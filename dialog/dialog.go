@@ -54,7 +54,7 @@ func (d *Dialog) showNode(ctx context.Context, b *bot.Bot, chatID any, node Node
 		ChatID:      chatID,
 		Text:        node.Text,
 		ParseMode:   models.ParseModeMarkdown,
-		ReplyMarkup: node.buildKB(d.prefix, d.nodePrefix, d.callbackPrefix, node.ID),
+		ReplyMarkup: node.buildKB(d.prefix, d.nodePrefix, d.callbackPrefix),
 	}
 
 	return b.SendMessage(ctx, params)
@@ -80,12 +80,9 @@ func (d *Dialog) callback(ctx context.Context, b *bot.Bot, update *models.Update
 		d.onError(fmt.Errorf("failed to answer callback query"))
 	}
 
-	data, isCustomCallback := strings.CutPrefix(update.CallbackQuery.Data, d.prefix+d.callbackPrefix)
+	btnID, isCustomCallback := strings.CutPrefix(update.CallbackQuery.Data, d.prefix+d.callbackPrefix)
 	if isCustomCallback {
-		btnData := strings.Split(data, "_")
-		parentNodeID, btnID := btnData[0], btnData[1]
-		node, _ := d.findNode(parentNodeID)
-		btn, ok := node.findButton(btnID)
+		btn, ok := d.findButton(btnID)
 		if !ok {
 			d.onError(fmt.Errorf("failed to find button with id %s", btnID))
 			return
@@ -108,7 +105,7 @@ func (d *Dialog) callback(ctx context.Context, b *bot.Bot, update *models.Update
 			MessageID:   update.CallbackQuery.Message.Message.ID,
 			Text:        node.Text,
 			ParseMode:   models.ParseModeMarkdown,
-			ReplyMarkup: node.buildKB(d.prefix, d.nodePrefix, d.callbackPrefix, node.ID),
+			ReplyMarkup: node.buildKB(d.prefix, d.nodePrefix, d.callbackPrefix),
 		})
 		if errEdit != nil {
 			d.onError(errEdit)
@@ -120,7 +117,7 @@ func (d *Dialog) callback(ctx context.Context, b *bot.Bot, update *models.Update
 		ChatID:      update.CallbackQuery.Message.Message.Chat.ID,
 		Text:        node.Text,
 		ParseMode:   models.ParseModeMarkdown,
-		ReplyMarkup: node.buildKB(d.prefix, d.nodePrefix, d.callbackPrefix, node.ID),
+		ReplyMarkup: node.buildKB(d.prefix, d.nodePrefix, d.callbackPrefix),
 	})
 	if errSend != nil {
 		d.onError(errSend)
@@ -137,14 +134,15 @@ func (d *Dialog) findNode(id string) (Node, bool) {
 	return Node{}, false
 }
 
-func (node *Node) findButton(ID string) (Button, bool) {
-	for _, row := range node.Keyboard {
-		for _, btn := range row {
-			if btn.ID == ID {
-				return btn, true
+func (d *Dialog) findButton(ID string) (Button, bool) {
+	for _, node := range d.nodes {
+		for _, row := range node.Keyboard {
+			for _, btn := range row {
+				if btn.ID == ID {
+					return btn, true
+				}
 			}
 		}
 	}
-
 	return Button{}, false
 }

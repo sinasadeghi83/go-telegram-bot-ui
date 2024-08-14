@@ -20,7 +20,7 @@ type Node struct {
 	Keyboard [][]Button
 }
 
-func (n Node) buildKB(prefix, nodePrefix, callbackPrefix, parentNodeID string) models.ReplyMarkup {
+func (n Node) buildKB(prefix, nodePrefix, callbackPrefix string) models.ReplyMarkup {
 	if len(n.Keyboard) == 0 {
 		return nil
 	}
@@ -37,7 +37,7 @@ func (n Node) buildKB(prefix, nodePrefix, callbackPrefix, parentNodeID string) m
 			case btn.URL != "":
 				b.URL = btn.URL
 			case btn.CallbackHandler != nil:
-				b.CallbackData = prefix + callbackPrefix + parentNodeID + "_" + btn.ID
+				b.CallbackData = prefix + callbackPrefix + btn.ID
 			default:
 				b.CallbackData = prefix + nodePrefix + btn.NodeID
 
