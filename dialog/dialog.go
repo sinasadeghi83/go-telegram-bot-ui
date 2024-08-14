@@ -95,7 +95,7 @@ func (d *Dialog) callback(ctx context.Context, b *bot.Bot, update *models.Update
 		return
 	}
 
-	nodeID := strings.TrimPrefix(update.CallbackQuery.Data, d.prefix)
+	nodeID := strings.TrimPrefix(update.CallbackQuery.Data, d.prefix+d.nodePrefix)
 	node, ok := d.findNode(nodeID)
 	if !ok {
 		d.onError(fmt.Errorf("failed to find node with id %s", nodeID))
