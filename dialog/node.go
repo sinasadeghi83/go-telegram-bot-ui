@@ -10,6 +10,7 @@ type Button struct {
 	NodeID          string
 	URL             string
 	CallbackHandler bot.HandlerFunc
+	CallbackData    string
 }
 
 type Node struct {

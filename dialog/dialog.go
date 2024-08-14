@@ -90,6 +90,7 @@ func (d *Dialog) callback(ctx context.Context, b *bot.Bot, update *models.Update
 			d.onError(fmt.Errorf("failed to find button with text %s", btnText))
 			return
 		}
+		update.CallbackQuery.Data = btn.CallbackData
 		btn.CallbackHandler(ctx, b, update)
 		return
 	}
